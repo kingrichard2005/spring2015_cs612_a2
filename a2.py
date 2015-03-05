@@ -16,10 +16,10 @@ class TestHelper():
    # A test helper class
 
    # default square dimension (10) per assignment reqs
-   def __init__(self, rangeOfRandInts = 100, square_dim = 10 ):
+   def __init__(self, upperIntRangeLim = 100, square_dim = 10 ):
       self.aTempFile    = TemporaryFile();
       # create the 10 x 10 array of integers
-      self.a2dArr          = np.random.random_integers(rangeOfRandInts, size=(square_dim,square_dim));
+      self.a2dArr          = np.arange(0, upperIntRangeLim).reshape(square_dim,square_dim);
       # save the 10 x 10 array of integers to a temp file and keep handle for reference
       self.saveInitializedArraytoATempFile();
 
@@ -45,7 +45,9 @@ class DataManager():
 
     def extractSectionOfArray( self, rowIndexesToExtract = [], colIndexesToExtract = [] ):
         try:
-            pass;
+           print self.TwoD;
+           print self.TwoD[np.array(rowIndexesToExtract), np.array(colIndexesToExtract)];
+           pass;
         except:
             raise Exception("error in extractSectionOfArray(...)");
 
@@ -73,7 +75,7 @@ class TestUM(unittest.TestCase):
         # Act: Extract a section of the array
         rowIndexesToExtract = [3, 5, 7, 9];
         colIndexesToExtract = [2, 4, 6, 8];
-
+        dataManager.extractSectionOfArray(rowIndexesToExtract, colIndexesToExtract);
         # Assert: Extracted section matches expected array dimensions
         expected    = (4,4);
         result      = dataManager.extractedArray.shape;
