@@ -17,43 +17,67 @@ class TestHelper():
 
    # default square dimension (10) per assignment reqs
    def __init__(self, rangeOfRandInts = 100, square_dim = 10 ):
-      self.tempTestFile    = TemporaryFile();
+      self.aTempFile    = TemporaryFile();
+      # create the 10 x 10 array of integers
       self.a2dArr          = np.random.random_integers(rangeOfRandInts, size=(square_dim,square_dim));
-      self.writeABunchOfNumbersToATempFile();
+      # save the 10 x 10 array of integers to a temp file and keep handle for reference
+      self.saveInitializedArraytoATempFile();
 
-   def writeABunchOfNumbersToATempFile(self):
+   def saveInitializedArraytoATempFile(self):
       try:
          # Writes a bunch of numbers to a temp test file
-         np.save(self.tempTestFile, self.a2dArr)
-         self.tempTestFile.seek(0);
+         np.save(self.aTempFile, self.a2dArr)
+         self.aTempFile.seek(0);
       except:
          print "error in writeABunchOfNumbersToAFile(...)"
 
 class DataManager():
-    # Assignment 1 class
+    # Class to manage input data
     def __init__( self ):
-        self.TwoD = [[]];
+        self.TwoD           = np.array([[]]);
+        self.extractedArray = np.array([[]]);
 
-    def method1LoadAFileToTwoD( self, aFileObj ):
+    def readArrayFromFile( self, aFileObj ):
         try:
             self.TwoD = np.load(aFileObj);
         except:
-            print "error in method1LoadAFileToTwoD(...)";
+            raise Exception("error in method1LoadAFileToTwoD(...)");
+
+    def extractSectionOfArray( self, rowIndexesToExtract = [], colIndexesToExtract = [] ):
+        try:
+            pass;
+        except:
+            raise Exception("error in extractSectionOfArray(...)");
 
 class TestUM(unittest.TestCase):
     # Data Manager tester
     def setUp(self):
         # Arrange: Create a test helper that provides
         # a file with a bunch of integers
-        self.ts = TestHelper();
+        self.helper = TestHelper();
  
-    def test_method1_load_a_file(self):
-        # Arrange:
-        # Act: 
-        # Assert:
-        expected = True;
-        result   = False;
-        self.assertEqual( expected,result) 
+    def test_load_a_file(self):
+        # Arrange: Create a DataMananger
+        dataManager = DataManager();
+        # Act: Read
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        # Assert: The loaded array matches the 10 x 10 array read from a file
+        expected    = self.helper.a2dArr;
+        result      = dataManager.TwoD;
+        self.assertEqual( np.array_equal(expected,result), True );
+
+    def test_extracted_portion_matches_dimensions(self):
+        # Arrange: Create a DataMananger
+        dataManager = DataManager();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        # Act: Extract a section of the array
+        rowIndexesToExtract = [3, 5, 7, 9];
+        colIndexesToExtract = [2, 4, 6, 8];
+
+        # Assert: Extracted section matches expected array dimensions
+        expected    = (4,4);
+        result      = dataManager.extractedArray.shape;
+        self.assertEqual( expected,result );
 
 if __name__ == "__main__":
     #unittest.main();
