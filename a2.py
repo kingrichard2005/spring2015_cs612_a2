@@ -60,6 +60,12 @@ class DataManager():
         except:
             raise Exception("error in extractSectionOfArray(...)");
 
+    def normalizeTwoDArray( self ):
+        try:
+            pass;
+        except:
+            raise Exception("error in normalizeTwoDArray(...)");
+
 class TestUM(unittest.TestCase):
     # Data Manager tester
     def setUp(self):
@@ -78,16 +84,30 @@ class TestUM(unittest.TestCase):
         self.assertEqual( np.array_equal(expected,result), True );
 
     def test_extracted_portion_matches_dimensions(self):
-        # Arrange: Create a DataMananger
+        # Arrange: Create a DataMananger with loaded data
         dataManager = DataManager();
         dataManager.readArrayFromFile(self.helper.aTempFile); 
         # Act: Extract a section of the array
         rowIndexesToExtract = [3, 5, 7, 9];
         colIndexesToExtract = [2, 4, 6, 8];
-        dataManager.extractSectionOfArray(rowIndexesToExtract, colIndexesToExtract);
+        dataManager.extractSectionOfTwoDArray(rowIndexesToExtract, colIndexesToExtract);
         # Assert: Extracted section matches expected array dimensions
         expected    = (4,4);
         result      = dataManager.extractedArray.shape;
+        self.assertEqual( expected,result );
+
+    def test_extracted_portion_matches_dimensions(self):
+        # Arrange: Create a DataMananger with loaded data and extracted subarray
+        dataManager = DataManager();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        rowIndexesToExtract = [3, 5, 7, 9];
+        colIndexesToExtract = [2, 4, 6, 8];
+        dataManager.extractSectionOfTwoDArray(rowIndexesToExtract, colIndexesToExtract);
+        # Act: Normalize the data manager's 2D array
+        dataManager.normalizeTwoDArray();
+        # Assert: All normalized values are between 0 and 1
+        expected    = True;
+        result      = False;
         self.assertEqual( expected,result );
 
 if __name__ == "__main__":
