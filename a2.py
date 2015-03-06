@@ -35,6 +35,7 @@ class DataManager():
     # Class to manage input data
     def __init__( self ):
         self.TwoD           = np.array([[]]);
+        self.normalizedTwoD = np.array([[]]);
         self.extractedArray = np.array([[]]);
 
     def readArrayFromFile( self, aFileObj ):
@@ -60,9 +61,18 @@ class DataManager():
         except:
             raise Exception("error in extractSectionOfArray(...)");
 
-    def normalizeTwoDArray( self ):
+    def normalizeTwoDArray( self, a = 1.0, b = 0.0, normAxis = 0 ):
+        '''
+        Normalizes numpy array values to be between arbitrary points 'a' and 'b' 
+        along specified 'normaxis' using generalized feature scaling method.
+        ref:
+        http://en.wikipedia.org/wiki/Normalization_%28statistics%29#Examples
+        '''
         try:
-            pass;
+            mins                = np.min(self.TwoD, axis=normAxis);
+            maxs                = np.max(self.TwoD, axis=normAxis);
+            range               = maxs - mins;
+            self.normalizedTwoD = a + ((self.TwoD - mins ) * (b - a) / range);
         except:
             raise Exception("error in normalizeTwoDArray(...)");
 
@@ -96,18 +106,19 @@ class TestUM(unittest.TestCase):
         result      = dataManager.extractedArray.shape;
         self.assertEqual( expected,result );
 
-    def test_extracted_portion_matches_dimensions(self):
+    def test_twod_normalization(self):
         # Arrange: Create a DataMananger with loaded data and extracted subarray
         dataManager = DataManager();
         dataManager.readArrayFromFile(self.helper.aTempFile); 
         rowIndexesToExtract = [3, 5, 7, 9];
         colIndexesToExtract = [2, 4, 6, 8];
         dataManager.extractSectionOfTwoDArray(rowIndexesToExtract, colIndexesToExtract);
-        # Act: Normalize the data manager's 2D array
+        # Act: Normalize extracted array
         dataManager.normalizeTwoDArray();
         # Assert: All normalized values are between 0 and 1
         expected    = True;
-        result      = False;
+        result      = [ True if (0.0 <= i <= 1.0) else False for i in np.ravel(dataManager.normalizedTwoD)];
+        result      = True if (result.count(False) == 0) else False;
         self.assertEqual( expected,result );
 
 if __name__ == "__main__":
