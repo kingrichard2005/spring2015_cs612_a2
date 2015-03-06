@@ -43,11 +43,20 @@ class DataManager():
         except:
             raise Exception("error in method1LoadAFileToTwoD(...)");
 
-    def extractSectionOfArray( self, rowIndexesToExtract = [], colIndexesToExtract = [] ):
+    def extractSectionOfTwoDArray( self, rowIndexesToExtract = [], colIndexesToExtract = [] ):
+       # Extract a section of the DataManager's internal 2D numpy array using a row/column 
+       # filter mask
         try:
-           print self.TwoD;
-           print self.TwoD[np.array(rowIndexesToExtract), np.array(colIndexesToExtract)];
-           pass;
+           rowAxisNdx      = 0;
+           columnAxisNdx   = 1;
+           # Build a row filter mask
+           row_filter_mask = np.array( [True if i in rowIndexesToExtract else False for i in range(0, int(self.TwoD.shape[rowAxisNdx]))] );
+           # Build a column filter mask
+           col_filter_mask = np.array( [True if i in colIndexesToExtract else False for i in range(0, int(self.TwoD.shape[columnAxisNdx]))] );
+
+           # split
+           subSection          = self.TwoD[ row_filter_mask ];
+           self.extractedArray = subSection[:,col_filter_mask];
         except:
             raise Exception("error in extractSectionOfArray(...)");
 
