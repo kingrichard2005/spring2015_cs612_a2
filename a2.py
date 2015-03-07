@@ -76,6 +76,21 @@ class DataManager():
         except:
             raise Exception("error in normalizeTwoDArray(...)");
 
+    def computeBasicStats( self ):
+        '''
+         Computes mean, median and standard deviation of self.TwoD array
+         and returns a dictionary containing computed values reference-able
+         by key-names "mean", "median" and "stdev"
+        '''
+        try:
+            statsDict           = {};
+            statsDict["mean"]   = np.mean(self.TwoD);
+            statsDict["median"] = np.median(self.TwoD);
+            statsDict["stdev"]  = np.std(self.TwoD);
+            return statsDict;
+        except:
+            raise Exception("error in normalizeTwoDArray(...)");
+
 class TestUM(unittest.TestCase):
     # Data Manager tester
     def setUp(self):
@@ -119,6 +134,17 @@ class TestUM(unittest.TestCase):
         expected    = True;
         result      = [ True if (0.0 <= i <= 1.0) else False for i in np.ravel(dataManager.normalizedTwoD)];
         result      = True if (result.count(False) == 0) else False;
+        self.assertEqual( expected,result );
+
+    def test_mean_median_and_standarddeviation_of_2dArray(self):
+        # Arrange: Create a DataMananger with loaded data
+        dataManager = DataManager();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        # Act: Find the mean, median and standard deviation of loaded two dimensional array
+        statsDict   = dataManager.computeBasicStats();
+        # Assert: TODO
+        expected    = True;
+        result      = False;
         self.assertEqual( expected,result );
 
 if __name__ == "__main__":
