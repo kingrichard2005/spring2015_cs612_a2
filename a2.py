@@ -226,16 +226,45 @@ class TestUM(unittest.TestCase):
         result      = True if (result.count(False) == 0) else False;
         self.assertEqual( expected,result );
 
-    def test_mean_median_and_standarddeviation_of_2dArray(self):
-        # Arrange: Create a DataMananger with loaded data
+    def test_get_ten_by_ten_mean(self):
+        #Arrange:Create homework2 class object
+        #Create the object
+        #call the appropriate functions to get a 10x10 array
         dataManager = Homework2();
         dataManager.readArrayFromFile(self.helper.aTempFile); 
-        # Act: Find the mean, median and standard deviation of loaded two dimensional array
-        statsDict   = dataManager.computeBasicStats();
-        # Assert: TODO
-        expected    = True;
-        result      = False;
-        self.assertEqual( expected,result );
+        
+        #Act: get the mean of the ten_by_ten
+        mean = dataManager.get_mean(dataManager.TwoD);
+
+        #Assert: Verify the resulting mean
+        expected = np.mean( np.ravel( dataManager.TwoD ) );
+
+        if mean == expected:
+            #if the expected value and the result are the same then print the mean on the screen
+            print "mean is {0}".format(mean);
+
+        self.assertEqual(mean, expected);
+
+    def test_get_ten_by_ten_median(self):
+        #Arrange:Create homework2 class object
+        #Create the object
+        #call the appropriate functions to get a 10x10 array
+        dataManager = Homework2();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+
+        #This function gets the array and returns the median of all elements
+        #You must use the built_in function of median to do this question
+        #Act: get the median of the ten_by_ten
+        median = dataManager.get_ten_by_ten_median(dataManager.TwoD);
+
+        #Assert: Verify the resulting median
+        expected = np.median( np.ravel( dataManager.TwoD ) );
+
+        if median == expected:
+            #if the expected value and the result are the same then print the median on the screen
+            print "median is {0}".format(median);
+
+        self.assertEqual(median, expected);
 
 if __name__ == "__main__":
     #unittest.main();
