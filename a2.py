@@ -132,7 +132,6 @@ class Homework2():
         except:
             raise Exception("error in get_ten_by_ten_median");
 
-
     def get_ten_by_ten_standard_deviation(self, array):
         '''
             This function gets the array and returns the standard deviation of all elements
@@ -144,7 +143,7 @@ class Homework2():
         except:
             raise Exception("error in get_ten_by_ten_standard_deviation");
 
-class TestUM(unittest.TestCase):
+class TestSequenceFunctions(unittest.TestCase):
     # Data Manager tester
     def setUp(self):
         # Arrange: Create a test helper that provides
@@ -266,14 +265,27 @@ class TestUM(unittest.TestCase):
 
         self.assertEqual(median, expected);
 
+    def test_get_ten_by_ten_standard_deviation(self):
+        #Arrange:Create homework2 class object
+        #Create the object
+        #call the appropriate functions to get a 10x10 array
+        dataManager = Homework2();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        
+        #Act: get the standard deviation of the ten_by_ten
+        stddev = dataManager.get_ten_by_ten_standard_deviation( np.ravel(dataManager.TwoD) );
+
+        #Assert: Verify the resulting standard deviation
+        expected = np.std( np.ravel( dataManager.TwoD ) );
+
+        #if the expected value and the result are the same then print the standard deviation on the screen
+        if stddev == expected:
+            #if the expected value and the result are the same then print the median on the screen
+            print "standard deviation is {0}".format(stddev);
+
+        self.assertEqual(stddev, expected);
+
 if __name__ == "__main__":
     #unittest.main();
-    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestUM));
-    #print "testing complete"
-    #ts          = TestHelper();
-    #dataManager = DataManager();
-    #dataManager.method1LoadAFileToOneD(ts.tempTestFile);
-    #dataManager.method2CreateTwoD();
-    #dataManager.method3SortOneD();
-    #dataManager.method4PartitionTwoD();
-    #dataManager.method5PlacePartitionsInFiles()
+    unittest.TextTestRunner().run(unittest.TestLoader().loadTestsFromTestCase(TestSequenceFunctions));
+    print "testing complete";
