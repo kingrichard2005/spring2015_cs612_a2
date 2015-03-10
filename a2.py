@@ -88,25 +88,11 @@ class Homework2():
         http://en.wikipedia.org/wiki/Normalization_%28statistics%29#Examples
         '''
         try:
-            mins                = np.min(self.TwoD, axis=normAxis);
-            maxs                = np.max(self.TwoD, axis=normAxis);
+            mins                = np.min(np.ravel(self.TwoD), axis=normAxis);
+            maxs                = np.max(np.ravel(self.TwoD), axis=normAxis);
             range               = maxs - mins;
             self.normalizedTwoD = a + ((self.TwoD - mins ) * (b - a) / range);
-        except:
-            raise Exception("error in normalizeTwoDArray(...)");
-
-    def computeBasicStats( self ):
-        '''
-         Computes mean, median and standard deviation of self.TwoD array
-         and returns a dictionary containing computed values reference-able
-         by key-names "mean", "median" and "stdev"
-        '''
-        try:
-            statsDict           = {};
-            statsDict["mean"]   = np.mean(self.TwoD);
-            statsDict["median"] = np.median(self.TwoD);
-            statsDict["stdev"]  = np.std(self.TwoD);
-            return statsDict;
+            self.normalizedTwoD = np.round(self.normalizedTwoD, decimals = 2);
         except:
             raise Exception("error in normalizeTwoDArray(...)");
 
@@ -167,6 +153,7 @@ class TestSequenceFunctions(unittest.TestCase):
                      [80, 81, 82, 83, 84, 85, 86,87, 88, 89],
                      [90, 91, 92, 93, 94, 95, 96,97, 98, 99]])
         result      = homework2.TwoD;
+        print "test_get_ten_by_ten result:\n{0}".format(result);
         self.assertEqual( np.array_equal(expected,result), True );
 
     def test_extracted_portion_matches_dimensions(self):
@@ -176,10 +163,11 @@ class TestSequenceFunctions(unittest.TestCase):
         # Act: Extract a section of the array
         rowIndexesToExtract = [3, 5, 7, 9];
         colIndexesToExtract = [2, 4, 6, 8];
-        result = dataManager.get_subarray(rowIndexesToExtract, colIndexesToExtract);
+        subArray = dataManager.get_subarray(rowIndexesToExtract, colIndexesToExtract);
         # Assert: Extracted section matches expected array dimensions
         expected    = (4,4);
-        result      = result.shape;
+        result      = subArray.shape;
+        print "test_extracted_portion_matches_dimensions original:\n{0}\nSubArray\n{1}".format(dataManager.TwoD, subArray);
         self.assertEqual( expected,result );
 
     def test_get_selected_row_indidicies(self):
@@ -223,6 +211,7 @@ class TestSequenceFunctions(unittest.TestCase):
         expected    = True;
         result      = [ True if (b <= i <= a) else False for i in np.ravel(dataManager.normalizedTwoD)];
         result      = True if (result.count(False) == 0) else False;
+        print "test_normalize_between_0_1 original:\n{0}\nnormalized between 0 and 1\n{1}".format(dataManager.TwoD, dataManager.normalizedTwoD);
         self.assertEqual( expected,result );
 
     def test_get_ten_by_ten_mean(self):
