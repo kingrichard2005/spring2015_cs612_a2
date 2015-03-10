@@ -94,6 +94,7 @@ class Homework2():
             range               = maxs - mins;
             self.normalizedTwoD = a + ((self.TwoD - mins ) * (b - a) / range);
             self.normalizedTwoD = np.round(self.normalizedTwoD, decimals = 2);
+            self.normalizedTwoD = np.ravel(self.normalizedTwoD)[::-1].reshape(10,10);
         except:
             raise Exception("error in normalizeTwoDArray(...)");
 
