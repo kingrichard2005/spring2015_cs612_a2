@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 #-------------------------------------------------------------------------------
 # Name:        cs612-a2
 # Description: Assignment 2
@@ -156,20 +157,6 @@ class TestSequenceFunctions(unittest.TestCase):
         print "test_get_ten_by_ten result:\n{0}".format(result);
         self.assertEqual( np.array_equal(expected,result), True );
 
-    def test_extracted_portion_matches_dimensions(self):
-        # Arrange: Create a DataMananger with loaded data
-        dataManager = Homework2();
-        dataManager.readArrayFromFile(self.helper.aTempFile); 
-        # Act: Extract a section of the array
-        rowIndexesToExtract = [3, 5, 7, 9];
-        colIndexesToExtract = [2, 4, 6, 8];
-        subArray = dataManager.get_subarray(rowIndexesToExtract, colIndexesToExtract);
-        # Assert: Extracted section matches expected array dimensions
-        expected    = (4,4);
-        result      = subArray.shape;
-        print "test_extracted_portion_matches_dimensions original:\n{0}\nSubArray\n{1}".format(dataManager.TwoD, subArray);
-        self.assertEqual( expected,result );
-
     def test_get_selected_row_indidicies(self):
         # Arrange: Create a DataMananger with loaded data
         dataManager = Homework2();
@@ -194,6 +181,20 @@ class TestSequenceFunctions(unittest.TestCase):
         # Assert: Extracted section matches expected array dimensions
         expected    = (4,4);
         result      = colsection.shape;
+        self.assertEqual( expected,result );
+      
+    def test_select_rows_and_columns_by_arrays(self):
+        # Arrange: Create a DataMananger with loaded data
+        dataManager = Homework2();
+        dataManager.readArrayFromFile(self.helper.aTempFile); 
+        # Act: Extract a section of the array
+        rowIndexesToExtract = [3, 5, 7, 9];
+        colIndexesToExtract = [2, 4, 6, 8];
+        subArray = dataManager.get_subarray(rowIndexesToExtract, colIndexesToExtract);
+        # Assert: Extracted section matches expected array dimensions
+        expected    = (4,4);
+        result      = subArray.shape;
+        print "test_extracted_portion_matches_dimensions original:\n{0}\nSubArray\n{1}".format(dataManager.TwoD, subArray);
         self.assertEqual( expected,result );
 
     def test_normalize_between_0_1(self):
