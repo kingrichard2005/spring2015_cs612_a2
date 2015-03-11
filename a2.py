@@ -47,7 +47,7 @@ class Homework2():
 
     def get_ten_by_ten_array(self):
         try:
-            pass;
+            return self.TwoD;
         except:
             raise Exception ("error in get_ten_by_ten_array()");
 
@@ -154,7 +154,7 @@ class TestSequenceFunctions(unittest.TestCase):
                      [70, 71, 72, 73, 74, 75, 76,77, 78, 79],
                      [80, 81, 82, 83, 84, 85, 86,87, 88, 89],
                      [90, 91, 92, 93, 94, 95, 96,97, 98, 99]])
-        result      = homework2.TwoD;
+        result      = homework2.get_ten_by_ten_array();
         print "test_get_ten_by_ten result:\n{0}".format(result);
         self.assertEqual( np.array_equal(expected,result), True );
 
